@@ -1,0 +1,28 @@
+﻿@model Sistema_Academico.Models.ExternalLoginListViewModel
+@using Microsoft.Owin.Security
+
+<h4>Olvido su pin?</h4>
+<hr />
+@{
+    var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
+    if (loginProviders.Count() == 0) {
+        <div>
+            <p>
+                Para recuperar su contraseña o pin click en <a href="https://procesos.intec.edu.do/Usuario/EnvioContrase%C3%B1a">Recupere su Contraseña</a>
+                .
+            </p>
+        </div>
+    }
+    else {
+        using (Html.BeginForm("ExternalLogin", "Account", new { ReturnUrl = Model.ReturnUrl })) {
+            @Html.AntiForgeryToken()
+            <div id="socialLoginList">
+                <p>
+                    @foreach (AuthenticationDescription p in loginProviders) {
+                        <button type="submit" class="btn btn-default" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">@p.AuthenticationType</button>
+                    }
+                </p>
+            </div>
+        }
+    }
+}
